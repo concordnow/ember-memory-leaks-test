@@ -1,56 +1,23 @@
 # ember-memory-leaks-test
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+This is a reproduction case demonstrating memory leaks in a freshly generated Ember 3.28.8.
 
-## Prerequisites
+## Reproduction steps
 
-You will need the following things properly installed on your computer.
+- Run `$ npm run test:ember -- --serve`
+- Open Chrome dev tools on the Memory tab
+- Take a Heap snapshot
+- Reload the page
+- Take another Heap snapshot
 
-* [Git](https://git-scm.com/)
-* [Node.js](https://nodejs.org/) (with npm)
-* [Ember CLI](https://ember-cli.com/)
-* [Google Chrome](https://google.com/chrome/)
+## Issue description
 
-## Installation
+On every test run the Heap snapshot keeps getting bigger.
 
-* `git clone <repository-url>` this repository
-* `cd ember-memory-leaks-test`
-* `npm install`
+![Heap snapshot size](2022-03-18-095233_1920x1059_scrot.png)
 
-## Running / Development
+You can noticed that the `Container` is still present and is not garbage collected.
 
-* `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
-* Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
+There is also 2 `Registry`:
 
-### Code Generators
-
-Make use of the many generators for code, try `ember help generate` for more details
-
-### Running Tests
-
-* `ember test`
-* `ember test --server`
-
-### Linting
-
-* `npm run lint`
-* `npm run lint:fix`
-
-### Building
-
-* `ember build` (development)
-* `ember build --environment production` (production)
-
-### Deploying
-
-Specify what it takes to deploy your app.
-
-## Further Reading / Useful Links
-
-* [ember.js](https://emberjs.com/)
-* [ember-cli](https://ember-cli.com/)
-* Development Browser Extensions
-  * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
+![Multiple registries](2022-03-18-100152_1919x1058_scrot.png)
